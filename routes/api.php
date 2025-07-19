@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ArticleBlogController;
+use App\Http\Controllers\AvisController;
 
 // Routes d'authentification
 Route::post('/register', [AuthController::class, 'register']);
@@ -60,4 +61,12 @@ Route::prefix('articles')->group(function () {
     Route::post('/', [ArticleBlogController::class, 'store']);
     Route::put('/{article}', [ArticleBlogController::class, 'update']);
     Route::delete('/{article}', [ArticleBlogController::class, 'destroy']);
+});
+
+Route::prefix('avis')->group(function () {
+    Route::get('/', [AvisController::class, 'index']);
+    Route::get('/{avi}', [AvisController::class, 'show']);
+    Route::post('/', [AvisController::class, 'store']);
+    Route::put('/{avi}', [AvisController::class, 'update']);
+    Route::delete('/{avi}', [AvisController::class, 'destroy']);
 });
