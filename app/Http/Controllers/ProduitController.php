@@ -15,7 +15,7 @@ class ProduitController extends Controller
     {
         $perPage = $request->get('per_page', 15);
         $lang = $request->header('Accept-Language', 'fr');
-        $produits = Produit::paginate($perPage);
+        $produits = Produit::with('categorie')->paginate($perPage);
         $data = $produits->getCollection()->map(function ($produit) use ($lang) {
             return (new ProduitResource($produit))->toArray(request());
         });
@@ -34,7 +34,7 @@ class ProduitController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Produit récupéré avec succès',
-            'data' => (new ProduitResource($produit))->toArray($request),
+            'data' => (new ProduitResource($produit->load('categorie')))->toArray($request),
         ]);
     }
 

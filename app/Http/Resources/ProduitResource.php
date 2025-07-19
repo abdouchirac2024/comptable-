@@ -13,6 +13,7 @@ class ProduitResource extends JsonResource
         return [
             'id' => $this->id,
             'categorie_id' => $this->categorie_id,
+            'categorie' => new \App\Http\Resources\CategorieResource($this->whenLoaded('categorie')),
             'nom' => $lang === 'en' ? $this->nom_en : $this->nom,
             'nom_en' => $this->nom_en,
             'description_courte' => $lang === 'en' ? $this->description_courte_en : $this->description_courte,
