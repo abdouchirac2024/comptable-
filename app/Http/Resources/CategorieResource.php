@@ -11,13 +11,13 @@ class CategorieResource extends JsonResource
     {
         $lang = $request->header('Accept-Language', 'fr');
         return [
-            'id' => $this->id,
-            'nom' => $lang === 'en' ? $this->nom_en : $this->nom,
-            'description' => $lang === 'en' ? $this->description_en : $this->description,
-            'slug' => $this->slug,
+            'id' => $this->id ?? null,
+            'nom' => $lang === 'en' ? ($this->nom_en ?? null) : ($this->nom ?? null),
+            'description' => $lang === 'en' ? ($this->description_en ?? null) : ($this->description ?? null),
+            'slug' => $this->slug ?? null,
             'produits_count' => $this->whenCounted('produits'),
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'created_at' => $this->created_at?->toISOString() ?? null,
+            'updated_at' => $this->updated_at?->toISOString() ?? null,
         ];
     }
 }
