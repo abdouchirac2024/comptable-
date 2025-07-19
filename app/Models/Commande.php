@@ -15,27 +15,43 @@ class Commande extends Model
         'statut',
         'total_commande',
         'adresse_livraison_snapshot',
+        'adresse_livraison_snapshot_en',
         'adresse_facturation_snapshot',
+        'adresse_facturation_snapshot_en',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($commande) {
+            $translator = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
+            $translator->setSource('fr');
+            if ($commande->adresse_livraison_snapshot) {
+                $commande->adresse_livraison_snapshot_en = $translator->translate($commande->adresse_livraison_snapshot);
+            }
+            if ($commande->adresse_facturation_snapshot) {
+                $commande->adresse_facturation_snapshot_en = $translator->translate($commande->adresse_facturation_snapshot);
+            }
+        });
+
+        static::updating(function ($commande) {
+            $translator = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
+            $translator->setSource('fr');
+            if ($commande->adresse_livraison_snapshot) {
+                $commande->adresse_livraison_snapshot_en = $translator->translate($commande->adresse_livraison_snapshot);
+            }
+            if ($commande->adresse_facturation_snapshot) {
+                $commande->adresse_facturation_snapshot_en = $translator->translate($commande->adresse_facturation_snapshot);
+            }
+        });
+    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function paiement()
-    {
-        return $this->hasOne(Paiement::class);
-    }
-
-    public function produits()
-    {
-        return $this->belongsToMany(Produit::class, 'ligne_commandes')
-                    ->withPivot('quantite', 'prix_unitaire_snapshot')
-                    ->withTimestamps();
-    }
-    
-    // Si vous souhaitez accéder au modèle LigneCommande directement
     public function lignes()
     {
         return $this->hasMany(LigneCommande::class);

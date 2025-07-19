@@ -8,6 +8,8 @@ use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ArticleBlogController;
 use App\Http\Controllers\AvisController;
+use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\LigneCommandeController;
 
 // Routes d'authentification
 Route::post('/register', [AuthController::class, 'register']);
@@ -69,4 +71,20 @@ Route::prefix('avis')->group(function () {
     Route::post('/', [AvisController::class, 'store']);
     Route::put('/{avi}', [AvisController::class, 'update']);
     Route::delete('/{avi}', [AvisController::class, 'destroy']);
+});
+
+Route::prefix('commandes')->group(function () {
+    Route::get('/', [CommandeController::class, 'index']);
+    Route::get('/{commande}', [CommandeController::class, 'show']);
+    Route::post('/', [CommandeController::class, 'store']);
+    Route::put('/{commande}', [CommandeController::class, 'update']);
+    Route::delete('/{commande}', [CommandeController::class, 'destroy']);
+});
+
+Route::prefix('ligne-commandes')->group(function () {
+    Route::get('/', [LigneCommandeController::class, 'index']);
+    Route::get('/{ligneCommande}', [LigneCommandeController::class, 'show']);
+    Route::post('/', [LigneCommandeController::class, 'store']);
+    Route::put('/{ligneCommande}', [LigneCommandeController::class, 'update']);
+    Route::delete('/{ligneCommande}', [LigneCommandeController::class, 'destroy']);
 });

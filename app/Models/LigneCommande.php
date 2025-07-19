@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class LigneCommande extends Model
 {
     use HasFactory;
-    
-    protected $table = 'ligne_commandes'; // Spécifier le nom de la table est une bonne pratique
+
+    protected $table = 'ligne_commandes';
 
     protected $fillable = [
         'commande_id',
@@ -17,4 +17,14 @@ class LigneCommande extends Model
         'quantite',
         'prix_unitaire_snapshot',
     ];
+
+    public function commande()
+    {
+        return $this->belongsTo(Commande::class);
+    }
+
+    public function produit()
+    {
+        return $this->belongsTo(Produit::class);
+    }
 }

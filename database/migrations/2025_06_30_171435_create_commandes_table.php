@@ -15,7 +15,9 @@ return new class extends Migration
             $table->enum('statut', ['en_attente', 'payee', 'expediee', 'annulee'])->default('en_attente');
             $table->decimal('total_commande', 10, 2);
             $table->text('adresse_livraison_snapshot');
+            $table->text('adresse_livraison_snapshot_en')->nullable();
             $table->text('adresse_facturation_snapshot');
+            $table->text('adresse_facturation_snapshot_en')->nullable();
             $table->timestamps(); // Crée date_commande (created_at)
         });
     }
