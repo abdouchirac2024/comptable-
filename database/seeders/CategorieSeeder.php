@@ -12,44 +12,19 @@ class CategorieSeeder extends Seeder
     {
         $categories = [
             [
-                'nom' => 'Électronique',
-                'description' => 'Produits électroniques et gadgets',
-                'slug' => 'electronique'
+                'nom' => 'Savons artisanaux',
+                'description' => 'Savons faits main avec des ingrédients naturels',
+                'slug' => 'savons-artisanaux'
             ],
             [
-                'nom' => 'Vêtements',
-                'description' => 'Vêtements et accessoires de mode',
-                'slug' => 'vetements'
+                'nom' => 'Bougies parfumées',
+                'description' => 'Bougies artisanales aux parfums variés',
+                'slug' => 'bougies-parfumees'
             ],
             [
-                'nom' => 'Livres',
-                'description' => 'Livres et publications',
-                'slug' => 'livres'
-            ],
-            [
-                'nom' => 'Sport',
-                'description' => 'Équipements et vêtements de sport',
-                'slug' => 'sport'
-            ],
-            [
-                'nom' => 'Maison',
-                'description' => 'Articles pour la maison et le jardin',
-                'slug' => 'maison'
-            ],
-            [
-                'nom' => 'Beauté',
-                'description' => 'Produits de beauté et cosmétiques',
-                'slug' => 'beaute'
-            ],
-            [
-                'nom' => 'Jouets',
-                'description' => 'Jouets et jeux pour enfants',
-                'slug' => 'jouets'
-            ],
-            [
-                'nom' => 'Automobile',
-                'description' => 'Pièces et accessoires automobiles',
-                'slug' => 'automobile'
+                'nom' => 'Maquillage naturels',
+                'description' => 'Produits de maquillage à base d’ingrédients naturels',
+                'slug' => 'maquillage-naturels'
             ]
         ];
 
@@ -57,4 +32,4 @@ class CategorieSeeder extends Seeder
             Categorie::create($category);
         }
     }
-} 
+}
