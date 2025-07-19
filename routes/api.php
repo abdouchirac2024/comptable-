@@ -6,6 +6,7 @@ use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\ArticleBlogController;
 
 // Routes d'authentification
 Route::post('/register', [AuthController::class, 'register']);
@@ -49,4 +50,14 @@ Route::prefix('images')->group(function () {
     Route::post('/', [ImageController::class, 'store']);
     Route::put('/{image}', [ImageController::class, 'update']);
     Route::delete('/{image}', [ImageController::class, 'destroy']);
+});
+
+
+
+Route::prefix('articles')->group(function () {
+    Route::get('/', [ArticleBlogController::class, 'index']);
+    Route::get('/{article}', [ArticleBlogController::class, 'show']);
+    Route::post('/', [ArticleBlogController::class, 'store']);
+    Route::put('/{article}', [ArticleBlogController::class, 'update']);
+    Route::delete('/{article}', [ArticleBlogController::class, 'destroy']);
 });

@@ -12,7 +12,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Auteur
             $table->string('titre');
-            $table->mediumText('contenu');
+            $table->string('titre_en')->nullable();
+            $table->text('contenu');
+            $table->text('contenu_en')->nullable();
             $table->string('meta_titre')->nullable();
             $table->text('meta_description')->nullable();
             $table->string('slug')->unique();
