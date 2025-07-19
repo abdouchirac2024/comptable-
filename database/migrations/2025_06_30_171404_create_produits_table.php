@@ -12,8 +12,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('categorie_id')->constrained('categories')->onDelete('cascade');
             $table->string('nom');
+            $table->string('nom_en')->nullable();
             $table->text('description_courte')->nullable();
+            $table->text('description_courte_en')->nullable();
             $table->longText('description_longue')->nullable();
+            $table->longText('description_longue_en')->nullable();
             $table->integer('stock')->default(0);
             $table->boolean('est_en_vedette')->default(false);
             $table->decimal('prix', 10, 2);

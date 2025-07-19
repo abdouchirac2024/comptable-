@@ -12,7 +12,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('produit_id')->constrained('produits')->onDelete('cascade');
             $table->string('url_image');
-            $table->string('texte_alternatif')->nullable();
+            $table->string('Description')->nullable();
+            $table->string('description_en')->nullable();
             $table->boolean('est_principale')->default(false);
             $table->timestamps();
         });

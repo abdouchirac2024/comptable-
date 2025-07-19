@@ -13,7 +13,9 @@ return new class extends Migration
             $table->string('nom');
             $table->string('email');
             $table->string('sujet')->nullable();
+            $table->string('sujet_en')->nullable();
             $table->text('message');
+            $table->text('message_en')->nullable();
             $table->boolean('est_lu')->default(false);
             $table->timestamps(); // date_soumission (created_at)
         });

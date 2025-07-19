@@ -12,9 +12,31 @@ class Image extends Model
     protected $fillable = [
         'produit_id',
         'url_image',
-        'texte_alternatif',
+        'Description',
+        'description_en',
         'est_principale',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($image) {
+            $translator = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
+            $translator->setSource('fr');
+            if ($image->Description) {
+                $image->description_en = $translator->translate($image->Description);
+            }
+        });
+
+        static::updating(function ($image) {
+            $translator = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
+            $translator->setSource('fr');
+            if ($image->Description) {
+                $image->description_en = $translator->translate($image->Description);
+            }
+        });
+    }
 
     public function produit()
     {

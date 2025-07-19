@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\ImageController;
 
 // Routes d'authentification
 Route::post('/register', [AuthController::class, 'register']);
@@ -30,4 +32,21 @@ Route::prefix('contacts')->group(function () {
     Route::post('/', [ContactController::class, 'store']);
     Route::put('/{contact}', [ContactController::class, 'update']);
     Route::delete('/{contact}', [ContactController::class, 'destroy']);
+});
+
+Route::prefix('produits')->group(function () {
+    Route::get('/', [ProduitController::class, 'index']);
+    Route::get('/{produit}', [ProduitController::class, 'show']);
+    Route::post('/', [ProduitController::class, 'store']);
+    Route::put('/{produit}', [ProduitController::class, 'update']);
+    Route::delete('/{produit}', [ProduitController::class, 'destroy']);
+    Route::get('/total', [ProduitController::class, 'total']);
+});
+
+Route::prefix('images')->group(function () {
+    Route::get('/', [ImageController::class, 'index']);
+    Route::get('/{image}', [ImageController::class, 'show']);
+    Route::post('/', [ImageController::class, 'store']);
+    Route::put('/{image}', [ImageController::class, 'update']);
+    Route::delete('/{image}', [ImageController::class, 'destroy']);
 });

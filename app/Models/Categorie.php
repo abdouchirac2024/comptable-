@@ -9,7 +9,30 @@ class Categorie extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nom', 'description', 'slug'];
+    protected $fillable = ['nom', 'nom_en', 'description', 'description_en', 'slug'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($categorie) {
+            $translator = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
+            $translator->setSource('fr');
+            $categorie->nom_en = $translator->translate($categorie->nom);
+            if ($categorie->description) {
+                $categorie->description_en = $translator->translate($categorie->description);
+            }
+        });
+
+        static::updating(function ($categorie) {
+            $translator = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
+            $translator->setSource('fr');
+            $categorie->nom_en = $translator->translate($categorie->nom);
+            if ($categorie->description) {
+                $categorie->description_en = $translator->translate($categorie->description);
+            }
+        });
+    }
 
     public function produits()
     {

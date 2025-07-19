@@ -18,26 +18,62 @@ class ContactController extends Controller
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->get('per_page', 15);
+        $lang = $request->header('Accept-Language', 'fr');
         $contacts = $this->contactService->getPaginatedContacts($perPage);
+        $data = $contacts->getCollection()->map(function ($contact) use ($lang) {
+            return [
+                'id' => $contact->id,
+                'nom' => $contact->nom,
+                'email' => $contact->email,
+                'sujet' => $lang === 'en' ? $contact->sujet_en : $contact->sujet,
+                'sujet_en' => $contact->sujet_en,
+                'message' => $lang === 'en' ? $contact->message_en : $contact->message,
+                'message_en' => $contact->message_en,
+                'created_at' => $contact->created_at,
+                'updated_at' => $contact->updated_at,
+            ];
+        });
+        $paginated = $contacts->toArray();
+        $paginated['data'] = $data;
         return response()->json([
             'success' => true,
             'message' => __('contacts.messages.index_success'),
-            'data' => new ContactCollection($contacts),
+            'data' => $paginated,
         ]);
     }
 
-    public function show(Contact $contact): JsonResponse
+    public function show(Request $request, Contact $contact): JsonResponse
     {
+        $lang = $request->header('Accept-Language', 'fr');
         return response()->json([
             'success' => true,
             'message' => __('contacts.messages.show_success'),
-            'data' => new ContactResource($contact),
+            'data' => [
+                'id' => $contact->id,
+                'nom' => $contact->nom,
+                'email' => $contact->email,
+                'sujet' => $lang === 'en' ? $contact->sujet_en : $contact->sujet,
+                'sujet_en' => $contact->sujet_en,
+                'message' => $lang === 'en' ? $contact->message_en : $contact->message,
+                'message_en' => $contact->message_en,
+                'created_at' => $contact->created_at,
+                'updated_at' => $contact->updated_at,
+            ],
         ]);
     }
 
     public function store(CreateContactRequest $request): JsonResponse
     {
-        $contact = $this->contactService->createContact($request->validated());
+        $data = $request->validated();
+        $translator = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
+        $translator->setSource('fr');
+        if (!empty($data['sujet'])) {
+            $data['sujet_en'] = $translator->translate($data['sujet']);
+        }
+        if (!empty($data['message'])) {
+            $data['message_en'] = $translator->translate($data['message']);
+        }
+        $contact = $this->contactService->createContact($data);
         return response()->json([
             'success' => true,
             'message' => __('contacts.messages.store_success'),
@@ -47,7 +83,16 @@ class ContactController extends Controller
 
     public function update(UpdateContactRequest $request, Contact $contact): JsonResponse
     {
-        $contact = $this->contactService->updateContact($contact, $request->validated());
+        $data = $request->validated();
+        $translator = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
+        $translator->setSource('fr');
+        if (!empty($data['sujet'])) {
+            $data['sujet_en'] = $translator->translate($data['sujet']);
+        }
+        if (!empty($data['message'])) {
+            $data['message_en'] = $translator->translate($data['message']);
+        }
+        $contact = $this->contactService->updateContact($contact, $data);
         return response()->json([
             'success' => true,
             'message' => __('contacts.messages.update_success'),
@@ -74,4 +119,4 @@ class ContactController extends Controller
             'data' => ContactResource::collection($contacts),
         ]);
     }
-} 
+}
