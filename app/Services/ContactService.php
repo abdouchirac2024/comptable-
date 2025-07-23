@@ -2,30 +2,27 @@
 
 namespace App\Services;
 
-use App\Models\Contact;
 use App\Repositories\Interfaces\ContactRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\Contact;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ContactService
 {
-    public function __construct(protected ContactRepositoryInterface $contactRepository)
-    {
-    }
+    protected $contactRepository;
 
-    public function getAllContacts(): Collection
+    public function __construct(ContactRepositoryInterface $contactRepository)
     {
-        return $this->contactRepository->all();
+        $this->contactRepository = $contactRepository;
     }
 
     public function getPaginatedContacts(int $perPage = 15): LengthAwarePaginator
     {
-        return $this->contactRepository->paginate($perPage);
+        return $this->contactRepository->all([], $perPage);
     }
 
-    public function getContactById(int $id): ?Contact
+    public function find(int $id): ?Contact
     {
-        return $this->contactRepository->findById($id);
+        return $this->contactRepository->find($id);
     }
 
     public function createContact(array $data): Contact
@@ -38,13 +35,13 @@ class ContactService
         return $this->contactRepository->update($contact, $data);
     }
 
-    public function deleteContact(Contact $contact): bool
+    public function deleteContact(Contact $contact): void
     {
-        return $this->contactRepository->delete($contact);
+        $this->contactRepository->delete($contact);
     }
 
-    public function searchContacts(string $term): Collection
+    public function searchContacts(string $term)
     {
-        return $this->contactRepository->search($term);
+        return $this->contactRepository->all(['search' => $term], 15);
     }
 } 

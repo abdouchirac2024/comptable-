@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
 
 /**
  * @OA\Tag(
@@ -201,5 +202,39 @@ class AuthController extends \App\Http\Controllers\Controller
         $user->refresh_token = null;
         $user->save();
         return response()->json(['message' => 'Déconnecté avec succès']);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/user",
+     *     tags={"Authentification"},
+     *     summary="Récupérer l'utilisateur connecté (nom, role, email, etc.)",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Informations de l'utilisateur connecté",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="nom", type="string", example="Dupont"),
+     *             @OA\Property(property="prenom", type="string", example="Jean"),
+     *             @OA\Property(property="email", type="string", example="jean.dupont@email.com"),
+     *             @OA\Property(property="role", type="string", example="client")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Non authentifié")
+     * )
+     */
+    public function user(Request $request)
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['message' => 'Non authentifié'], 401);
+        }
+        return response()->json([
+            'nom' => $user->nom,
+            'prenom' => $user->prenom,
+            'email' => $user->email,
+            'role' => $user->role,
+        ]);
     }
 }

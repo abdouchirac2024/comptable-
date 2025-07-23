@@ -16,6 +16,7 @@ class CreateContactRequest extends FormRequest
         return [
             'nom' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'sujet' => 'nullable|string|max:255',
             'message' => 'required|string|max:2000',
         ];
     }

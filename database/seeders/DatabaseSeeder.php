@@ -46,9 +46,9 @@ class DatabaseSeeder extends Seeder
         );
 
         // Seed des catégories
-        $this->call([
-            CategorieSeeder::class,
-            ContactSeeder::class,
-        ]);
+        // $this->call([
+        //     CategorieSeeder::class,
+        //     ContactSeeder::class,
+        // ]);
     }
 }

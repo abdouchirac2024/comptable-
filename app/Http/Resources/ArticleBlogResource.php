@@ -23,6 +23,7 @@ class ArticleBlogResource extends JsonResource
             'date_publication' => $this->date_publication?->toISOString(),
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
+            'image' => $this->image ? asset('storage/' . $this->image) : null,
         ];
     }
 }

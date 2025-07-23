@@ -10,15 +10,14 @@ class ArticleBlog extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'titre',
-        'titre_en',
         'contenu',
-        'contenu_en',
+        'image',
         'meta_titre',
         'meta_description',
         'slug',
         'date_publication',
+        'user_id',
     ];
 
     protected $casts = [

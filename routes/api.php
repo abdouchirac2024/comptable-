@@ -10,12 +10,17 @@ use App\Http\Controllers\ArticleBlogController;
 use App\Http\Controllers\AvisController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\LigneCommandeController;
+use App\Http\Controllers\FormationController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\MissionController;
+use App\Http\Controllers\PartenaireController;
 
 // Routes d'authentification
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/refresh', [AuthController::class, 'refresh']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
 
 // Routes pour les catégories
 Route::prefix('categories')->group(function () {
@@ -65,7 +70,9 @@ Route::prefix('articles')->group(function () {
     Route::delete('/{article}', [ArticleBlogController::class, 'destroy']);
 });
 
-Route::prefix('avis')->group(function () {
+Route::apiResource('article-blogs', ArticleBlogController::class);
+
+Route::prefix('avis')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AvisController::class, 'index']);
     Route::get('/{avi}', [AvisController::class, 'show']);
     Route::post('/', [AvisController::class, 'store']);
@@ -88,3 +95,9 @@ Route::prefix('ligne-commandes')->group(function () {
     Route::put('/{ligneCommande}', [LigneCommandeController::class, 'update']);
     Route::delete('/{ligneCommande}', [LigneCommandeController::class, 'destroy']);
 });
+
+Route::apiResource('formations', FormationController::class);
+Route::post('services/{service}/update', [ServiceController::class, 'update']);
+Route::apiResource('services', ServiceController::class);
+Route::apiResource('missions', MissionController::class);
+Route::apiResource('partenaires', PartenaireController::class);
