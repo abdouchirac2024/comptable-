@@ -5,6 +5,9 @@ namespace App\Services;
 use App\Repositories\Interfaces\ContactRepositoryInterface;
 use App\Models\Contact;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use App\Mail\ContactAutoReply;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactReply;
 
 class ContactService
 {
@@ -27,12 +30,21 @@ class ContactService
 
     public function createContact(array $data): Contact
     {
-        return $this->contactRepository->create($data);
+        $contact = $this->contactRepository->create($data);
+        return $contact;
     }
 
     public function updateContact(Contact $contact, array $data): Contact
     {
-        return $this->contactRepository->update($contact, $data);
+        $contact = $this->contactRepository->update($contact, $data);
+        
+        // Envoi d'email uniquement si une réponse est fournie
+        if (!empty($data['reponse']) && !empty($contact->email)) {
+            // Envoi asynchrone pour plus de fluidité
+            Mail::to($contact->email)->queue(new ContactReply($contact->nom, $data['reponse']));
+        }
+        
+        return $contact;
     }
 
     public function deleteContact(Contact $contact): void

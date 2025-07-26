@@ -65,19 +65,20 @@ class ContactController extends Controller
     public function store(CreateContactRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $translator = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
-        $translator->setSource('fr');
-        if (!empty($data['sujet'])) {
-            $data['sujet_en'] = $translator->translate($data['sujet']);
-        }
-        if (!empty($data['message'])) {
-            $data['message_en'] = $translator->translate($data['message']);
-        }
+        
         $contact = $this->contactService->createContact($data);
+        
         return response()->json([
             'success' => true,
-            'message' => __('contacts.messages.store_success'),
-            'data' => new ContactResource($contact),
+            'message' => 'Contact created successfully',
+            'data' => [
+                'id' => $contact->id,
+                'nom' => $contact->nom,
+                'email' => $contact->email,
+                'sujet' => $contact->sujet,
+                'message' => $contact->message,
+                'created_at' => $contact->created_at
+            ]
         ], 201);
     }
 

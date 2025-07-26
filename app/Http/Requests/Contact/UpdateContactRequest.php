@@ -14,10 +14,12 @@ class UpdateContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nom' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'sujet' => 'nullable|string|max:255',
-            'message' => 'required|string',
+            'nom' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|max:255',
+            'sujet' => 'sometimes|nullable|string|max:255',
+            'message' => 'sometimes|string',
+            'reponse' => 'sometimes|nullable|string',
+            'est_lu' => 'sometimes|boolean',
         ];
     }
 
