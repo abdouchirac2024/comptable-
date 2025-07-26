@@ -10,6 +10,9 @@ use App\Models\Contact;
 use App\Services\ContactService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactAutoReply;
+use App\Mail\ContactReply;
 
 class ContactController extends Controller
 {
@@ -119,5 +122,48 @@ class ContactController extends Controller
             'message' => __('contacts.messages.search_success'),
             'data' => ContactResource::collection($contacts),
         ]);
+    }
+
+    /**
+     * Test d'envoi d'email
+     */
+    public function testEmail(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'nom' => 'required|string',
+            'type' => 'required|in:auto,reply'
+        ]);
+
+        try {
+            $email = $request->email;
+            $nom = $request->nom;
+            $type = $request->type;
+
+            if ($type === 'auto') {
+                Mail::to($email)->send(new ContactAutoReply($nom, 'Message de test automatique'));
+                $message = 'Email de confirmation automatique envoyé avec succès';
+            } else {
+                Mail::to($email)->send(new ContactReply($nom, 'Réponse de test manuelle'));
+                $message = 'Email de réponse manuelle envoyé avec succès';
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'data' => [
+                    'email' => $email,
+                    'nom' => $nom,
+                    'type' => $type
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de l\'envoi d\'email: ' . $e->getMessage(),
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

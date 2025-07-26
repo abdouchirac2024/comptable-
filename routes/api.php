@@ -41,6 +41,7 @@ Route::prefix('contacts')->group(function () {
     Route::post('/', [ContactController::class, 'store']);
     Route::put('/{contact}', [ContactController::class, 'update']);
     Route::delete('/{contact}', [ContactController::class, 'destroy']);
+    Route::post('/test-email', [ContactController::class, 'testEmail']);
 });
 
 Route::prefix('produits')->group(function () {

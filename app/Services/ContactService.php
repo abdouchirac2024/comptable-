@@ -8,6 +8,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Mail\ContactAutoReply;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactReply;
+use Illuminate\Support\Facades\Log;
 
 class ContactService
 {
@@ -31,6 +32,20 @@ class ContactService
     public function createContact(array $data): Contact
     {
         $contact = $this->contactRepository->create($data);
+        
+        // Envoi d'email automatique de confirmation
+        if (!empty($contact->email)) {
+            try {
+                Mail::to($contact->email)->send(new ContactAutoReply($contact->nom, $contact->message));
+                Log::info('Email de confirmation envoyé à: ' . $contact->email);
+            } catch (\Exception $e) {
+                Log::error('Erreur lors de l\'envoi d\'email de confirmation: ' . $e->getMessage(), [
+                    'email' => $contact->email,
+                    'contact_id' => $contact->id
+                ]);
+            }
+        }
+        
         return $contact;
     }
 
@@ -40,8 +55,16 @@ class ContactService
         
         // Envoi d'email uniquement si une réponse est fournie
         if (!empty($data['reponse']) && !empty($contact->email)) {
-            // Envoi asynchrone pour plus de fluidité
-            Mail::to($contact->email)->queue(new ContactReply($contact->nom, $data['reponse']));
+            try {
+                // Envoi asynchrone pour plus de fluidité
+                Mail::to($contact->email)->queue(new ContactReply($contact->nom, $data['reponse']));
+                Log::info('Email de réponse envoyé à: ' . $contact->email);
+            } catch (\Exception $e) {
+                Log::error('Erreur lors de l\'envoi d\'email de réponse: ' . $e->getMessage(), [
+                    'email' => $contact->email,
+                    'contact_id' => $contact->id
+                ]);
+            }
         }
         
         return $contact;
