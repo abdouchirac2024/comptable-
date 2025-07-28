@@ -14,6 +14,8 @@ use App\Http\Controllers\FormationController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\MissionController;
 use App\Http\Controllers\PartenaireController;
+use App\Http\Controllers\HeroSectionController;
+use App\Http\Controllers\HeroSlideController;
 
 // Routes d'authentification
 Route::post('/register', [AuthController::class, 'register']);
@@ -61,8 +63,6 @@ Route::prefix('images')->group(function () {
     Route::delete('/{image}', [ImageController::class, 'destroy']);
 });
 
-
-
 Route::prefix('articles')->group(function () {
     Route::get('/', [ArticleBlogController::class, 'index']);
     Route::get('/{article}', [ArticleBlogController::class, 'show']);
@@ -97,8 +97,44 @@ Route::prefix('ligne-commandes')->group(function () {
     Route::delete('/{ligneCommande}', [LigneCommandeController::class, 'destroy']);
 });
 
-Route::apiResource('formations', FormationController::class);
+// Routes pour les formations avec support form-data
+Route::prefix('formations')->group(function () {
+    Route::get('/', [FormationController::class, 'index']);
+    Route::get('/{formation}', [FormationController::class, 'show']);
+    Route::post('/', [FormationController::class, 'store']);
+    Route::put('/{formation}', [FormationController::class, 'update']);
+    Route::post('/{formation}/update', [FormationController::class, 'update']); // Route alternative pour form-data
+    Route::delete('/{formation}', [FormationController::class, 'destroy']);
+});
+
 Route::post('services/{service}/update', [ServiceController::class, 'update']);
 Route::apiResource('services', ServiceController::class);
 Route::apiResource('missions', MissionController::class);
 Route::apiResource('partenaires', PartenaireController::class);
+
+// Routes pour les sections Hero
+Route::prefix('hero-sections')->group(function () {
+    Route::get('/', [HeroSectionController::class, 'index']);
+    Route::get('/active', [HeroSectionController::class, 'active']);
+    Route::get('/{heroSection}', [HeroSectionController::class, 'show']);
+    Route::post('/', [HeroSectionController::class, 'store']);
+    Route::put('/{heroSection}', [HeroSectionController::class, 'update']);
+    Route::post('/{heroSection}/update', [HeroSectionController::class, 'update']); // Route alternative pour form-data
+    Route::delete('/{heroSection}', [HeroSectionController::class, 'destroy']);
+    Route::post('/{heroSection}/activate', [HeroSectionController::class, 'activate']);
+    Route::post('/{heroSection}/deactivate', [HeroSectionController::class, 'deactivate']);
+});
+
+// Routes pour les slides Hero
+Route::prefix('hero-slides')->group(function () {
+    Route::get('/', [HeroSlideController::class, 'index']);
+    Route::get('/{heroSlide}', [HeroSlideController::class, 'show']);
+    Route::get('/section/{heroSectionId}', [HeroSlideController::class, 'bySection']);
+    Route::post('/', [HeroSlideController::class, 'store']);
+    Route::put('/{heroSlide}', [HeroSlideController::class, 'update']);
+    Route::post('/{heroSlide}/update', [HeroSlideController::class, 'update']); // Route alternative pour form-data
+    Route::delete('/{heroSlide}', [HeroSlideController::class, 'destroy']);
+    Route::post('/section/{heroSectionId}/reorder', [HeroSlideController::class, 'reorder']);
+    Route::post('/{heroSlide}/activate', [HeroSlideController::class, 'activate']);
+    Route::post('/{heroSlide}/deactivate', [HeroSlideController::class, 'deactivate']);
+});

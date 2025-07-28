@@ -35,6 +35,7 @@ class Kernel extends HttpKernel
         'api' => [
             // Ajoute CORS au groupe API
             \Fruitcake\Cors\HandleCors::class,
+            \App\Http\Middleware\HandlePutFormData::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],

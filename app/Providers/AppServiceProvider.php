@@ -18,6 +18,10 @@ use App\Repositories\FormationRepository;
 use App\Repositories\Interfaces\FormationRepositoryInterface;
 use App\Repositories\ArticleBlogRepository;
 use App\Repositories\Interfaces\ArticleBlogRepositoryInterface;
+use App\Repositories\HeroSectionRepository;
+use App\Repositories\Interfaces\HeroSectionRepositoryInterface;
+use App\Repositories\HeroSlideRepository;
+use App\Repositories\Interfaces\HeroSlideRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PartenaireRepositoryInterface::class, PartenaireRepository::class);
         $this->app->bind(FormationRepositoryInterface::class, FormationRepository::class);
         $this->app->bind(ArticleBlogRepositoryInterface::class, ArticleBlogRepository::class);
+        $this->app->bind(HeroSectionRepositoryInterface::class, HeroSectionRepository::class);
+        $this->app->bind(HeroSlideRepositoryInterface::class, HeroSlideRepository::class);
     }
 
     /**
