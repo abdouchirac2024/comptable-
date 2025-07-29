@@ -21,6 +21,8 @@ class StoreHeroSlideRequest extends FormRequest
             'description' => 'nullable|string|max:1000',
             'gradient' => 'nullable|string|max:255',
             'background_image' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:5120',
+            'images_upload.*' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:5120', // Images multiples
+            'image_alt_text' => 'nullable|string|max:255',
             'slide_duration' => 'nullable|integer|min:1000|max:30000',
             'is_active' => 'boolean',
         ];
@@ -46,6 +48,11 @@ class StoreHeroSlideRequest extends FormRequest
             'background_image.image' => 'Le fichier doit être une image.',
             'background_image.mimes' => 'L\'image doit être au format : jpg, jpeg, png, gif ou webp.',
             'background_image.max' => 'L\'image ne peut pas dépasser 5MB.',
+            'images_upload.*.image' => 'Chaque fichier doit être une image.',
+            'images_upload.*.mimes' => 'Chaque image doit être au format : jpg, jpeg, png, gif ou webp.',
+            'images_upload.*.max' => 'Chaque image ne peut pas dépasser 5MB.',
+            'image_alt_text.string' => 'Le texte alternatif doit être une chaîne de caractères.',
+            'image_alt_text.max' => 'Le texte alternatif ne peut pas dépasser 255 caractères.',
             'slide_duration.integer' => 'La durée du slide doit être un entier.',
             'slide_duration.min' => 'La durée du slide doit être au moins 1000ms.',
             'slide_duration.max' => 'La durée du slide ne peut pas dépasser 30000ms.',

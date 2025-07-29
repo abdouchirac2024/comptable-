@@ -367,4 +367,114 @@ class HeroSlideController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Ajouter une image à un slide
+     */
+    public function addImage(Request $request, HeroSlide $heroSlide)
+    {
+        try {
+            $request->validate([
+                'image' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:5120',
+                'alt_text' => 'nullable|string|max:255',
+                'caption' => 'nullable|string|max:255',
+            ]);
+
+            $heroSlide = $this->heroSlideService->addImage(
+                $heroSlide,
+                $request->file('image'),
+                $request->input('alt_text'),
+                $request->input('caption')
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Image ajoutée avec succès',
+                'data' => new HeroSlideResource($heroSlide)
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de l\'ajout d\'image au slide', [
+                'hero_slide_id' => $heroSlide->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de l\'ajout de l\'image',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Supprimer une image d'un slide
+     */
+    public function removeImage(Request $request, HeroSlide $heroSlide)
+    {
+        try {
+            $request->validate([
+                'image_path' => 'required|string',
+            ]);
+
+            $heroSlide = $this->heroSlideService->removeImage(
+                $heroSlide,
+                $request->input('image_path')
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Image supprimée avec succès',
+                'data' => new HeroSlideResource($heroSlide)
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de la suppression d\'image du slide', [
+                'hero_slide_id' => $heroSlide->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la suppression de l\'image',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Réordonnancer les images d'un slide
+     */
+    public function reorderImages(Request $request, HeroSlide $heroSlide)
+    {
+        try {
+            $request->validate([
+                'image_orders' => 'required|array',
+                'image_orders.*' => 'integer|min:0',
+            ]);
+
+            $heroSlide = $this->heroSlideService->reorderImages(
+                $heroSlide,
+                $request->input('image_orders')
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Images réordonnées avec succès',
+                'data' => new HeroSlideResource($heroSlide)
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Erreur lors du réordonnancement des images', [
+                'hero_slide_id' => $heroSlide->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors du réordonnancement des images',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 } 

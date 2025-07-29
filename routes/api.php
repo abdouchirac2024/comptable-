@@ -137,4 +137,9 @@ Route::prefix('hero-slides')->group(function () {
     Route::post('/section/{heroSectionId}/reorder', [HeroSlideController::class, 'reorder']);
     Route::post('/{heroSlide}/activate', [HeroSlideController::class, 'activate']);
     Route::post('/{heroSlide}/deactivate', [HeroSlideController::class, 'deactivate']);
+    
+    // Routes pour les images multiples
+    Route::post('/{heroSlide}/add-image', [HeroSlideController::class, 'addImage']);
+    Route::delete('/{heroSlide}/remove-image', [HeroSlideController::class, 'removeImage']);
+    Route::post('/{heroSlide}/reorder-images', [HeroSlideController::class, 'reorderImages']);
 });

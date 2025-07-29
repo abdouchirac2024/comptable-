@@ -18,6 +18,8 @@ class HeroSlideResource extends JsonResource
             'description' => $this->description,
             'gradient' => $this->gradient,
             'background_image' => $this->getBackgroundImageUrl(),
+            'images' => $this->getImagesUrlsAttribute(), // Images multiples
+            'image_alt_text' => $this->image_alt_text,
             'slide_duration' => $this->slide_duration,
             'is_active' => $this->is_active,
             'hero_section' => new HeroSectionResource($this->whenLoaded('heroSection')),
