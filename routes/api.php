@@ -2,14 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\ProduitController;
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ArticleBlogController;
-use App\Http\Controllers\AvisController;
-use App\Http\Controllers\CommandeController;
-use App\Http\Controllers\LigneCommandeController;
 use App\Http\Controllers\FormationController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\MissionController;
@@ -24,18 +18,7 @@ Route::post('/refresh', [AuthController::class, 'refresh']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
 
-// Routes pour les catégories
-Route::prefix('categories')->group(function () {
-    Route::get('/', [CategorieController::class, 'index']);
-    Route::get('/all', [CategorieController::class, 'all']);
-    Route::get('/search', [CategorieController::class, 'search']);
-    Route::post('/', [CategorieController::class, 'store']);
-    Route::get('/{categorie}', [CategorieController::class, 'show']);
-    Route::get('/slug/{slug}', [CategorieController::class, 'showBySlug']);
-    Route::put('/{categorie}', [CategorieController::class, 'update']);
-    Route::delete('/{categorie}', [CategorieController::class, 'destroy']);
-});
-
+// Routes pour les contacts
 Route::prefix('contacts')->group(function () {
     Route::get('/', [ContactController::class, 'index']);
     Route::get('/search', [ContactController::class, 'search']);
@@ -44,31 +27,6 @@ Route::prefix('contacts')->group(function () {
     Route::put('/{contact}', [ContactController::class, 'update']);
     Route::delete('/{contact}', [ContactController::class, 'destroy']);
     Route::post('/test-email', [ContactController::class, 'testEmail']);
-});
-
-Route::prefix('produits')->group(function () {
-    Route::get('/', [ProduitController::class, 'index']);
-    Route::get('/{produit}', [ProduitController::class, 'show']);
-    Route::post('/', [ProduitController::class, 'store']);
-    Route::put('/{produit}', [ProduitController::class, 'update']);
-    Route::delete('/{produit}', [ProduitController::class, 'destroy']);
-    Route::get('/total', [ProduitController::class, 'total']);
-});
-
-Route::prefix('images')->group(function () {
-    Route::get('/', [ImageController::class, 'index']);
-    Route::get('/{image}', [ImageController::class, 'show']);
-    Route::post('/', [ImageController::class, 'store']);
-    Route::put('/{image}', [ImageController::class, 'update']);
-    Route::delete('/{image}', [ImageController::class, 'destroy']);
-});
-
-Route::prefix('articles')->group(function () {
-    Route::get('/', [ArticleBlogController::class, 'index']);
-    Route::get('/{article}', [ArticleBlogController::class, 'show']);
-    Route::post('/', [ArticleBlogController::class, 'store']);
-    Route::put('/{article}', [ArticleBlogController::class, 'update']);
-    Route::delete('/{article}', [ArticleBlogController::class, 'destroy']);
 });
 
 // Routes pour les articles de blog avec support form-data
@@ -81,30 +39,6 @@ Route::prefix('article-blogs')->group(function () {
     Route::delete('/{article_blog}', [ArticleBlogController::class, 'destroy']);
 });
 
-Route::prefix('avis')->middleware('auth:sanctum')->group(function () {
-    Route::get('/', [AvisController::class, 'index']);
-    Route::get('/{avi}', [AvisController::class, 'show']);
-    Route::post('/', [AvisController::class, 'store']);
-    Route::put('/{avi}', [AvisController::class, 'update']);
-    Route::delete('/{avi}', [AvisController::class, 'destroy']);
-});
-
-Route::prefix('commandes')->group(function () {
-    Route::get('/', [CommandeController::class, 'index']);
-    Route::get('/{commande}', [CommandeController::class, 'show']);
-    Route::post('/', [CommandeController::class, 'store']);
-    Route::put('/{commande}', [CommandeController::class, 'update']);
-    Route::delete('/{commande}', [CommandeController::class, 'destroy']);
-});
-
-Route::prefix('ligne-commandes')->group(function () {
-    Route::get('/', [LigneCommandeController::class, 'index']);
-    Route::get('/{ligneCommande}', [LigneCommandeController::class, 'show']);
-    Route::post('/', [LigneCommandeController::class, 'store']);
-    Route::put('/{ligneCommande}', [LigneCommandeController::class, 'update']);
-    Route::delete('/{ligneCommande}', [LigneCommandeController::class, 'destroy']);
-});
-
 // Routes pour les formations avec support form-data
 Route::prefix('formations')->group(function () {
     Route::get('/', [FormationController::class, 'index']);
@@ -115,8 +49,17 @@ Route::prefix('formations')->group(function () {
     Route::delete('/{formation}', [FormationController::class, 'destroy']);
 });
 
-Route::post('services/{service}/update', [ServiceController::class, 'update']);
-Route::apiResource('services', ServiceController::class);
+// Routes pour les services avec support form-data
+Route::prefix('services')->group(function () {
+    Route::get('/', [ServiceController::class, 'index']);
+    Route::get('/{service}', [ServiceController::class, 'show']);
+    Route::post('/', [ServiceController::class, 'store']);
+    Route::put('/{service}', [ServiceController::class, 'update']);
+    Route::post('/{service}/update', [ServiceController::class, 'update']); // Route alternative pour form-data
+    Route::delete('/{service}', [ServiceController::class, 'destroy']);
+});
+
+// Routes pour les missions et partenaires
 Route::apiResource('missions', MissionController::class);
 Route::apiResource('partenaires', PartenaireController::class);
 
