@@ -71,7 +71,15 @@ Route::prefix('articles')->group(function () {
     Route::delete('/{article}', [ArticleBlogController::class, 'destroy']);
 });
 
-Route::apiResource('article-blogs', ArticleBlogController::class);
+// Routes pour les articles de blog avec support form-data
+Route::prefix('article-blogs')->group(function () {
+    Route::get('/', [ArticleBlogController::class, 'index']);
+    Route::get('/{article_blog}', [ArticleBlogController::class, 'show']);
+    Route::post('/', [ArticleBlogController::class, 'store']);
+    Route::put('/{article_blog}', [ArticleBlogController::class, 'update']);
+    Route::post('/{article_blog}/update', [ArticleBlogController::class, 'update']); // Route alternative pour form-data
+    Route::delete('/{article_blog}', [ArticleBlogController::class, 'destroy']);
+});
 
 Route::prefix('avis')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AvisController::class, 'index']);
