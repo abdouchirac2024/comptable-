@@ -62,6 +62,7 @@ Route::prefix('services')->group(function () {
 // Routes pour les missions et partenaires
 Route::apiResource('missions', MissionController::class);
 Route::apiResource('partenaires', PartenaireController::class);
+Route::post('partenaires/{partenaire}/edit', [PartenaireController::class, 'edit']);
 
 // Routes pour les sections Hero
 Route::prefix('hero-sections')->group(function () {

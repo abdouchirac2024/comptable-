@@ -37,6 +37,22 @@ class PartenaireController extends Controller
         return new PartenaireResource($partenaire);
     }
 
+    public function edit(Request $request, $id)
+    {
+        $partenaire = $this->partenaireService->find($id);
+        if (!$partenaire) {
+            return response()->json(['message' => 'Partenaire non trouvé'], 404);
+        }
+        
+        $data = $request->all();
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image');
+        }
+        
+        $partenaire = $this->partenaireService->update($partenaire, $data);
+        return new PartenaireResource($partenaire);
+    }
+
     public function store(StorePartenaireRequest $request)
     {
         $data = $request->validated();
